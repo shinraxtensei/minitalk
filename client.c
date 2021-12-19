@@ -3,13 +3,13 @@
 #include<stdio.h>
 
 
-// void	signal_handler_c(int signum)
-// {
-// 	if (signum == SIGUSR1)
-// 	{
-// 		printf("->Message sent \n");
-// 	}
-// }
+void	signal_handler_c(int signum)
+{
+	if (signum == SIGUSR1)
+	{
+		printf("->Message sent \n");
+	}
+}
 
 void    send_bits(int pid, char *message)
 {
@@ -20,24 +20,24 @@ void    send_bits(int pid, char *message)
     i = 0;
     if(!message)
         exit(EXIT_FAILURE);
-    while (1)
-    {
+     while (1)
+     {
         bit = -1;
-        while (++bit < 8)
+        while (++bit < 9)
         {
             if(message[i] & (128 >> bit))
-            {
+			{
                 if(kill(pid,SIGUSR1) == -1)
                     exit(1);
-            }
-            else if(kill(pid , SIGUSR2) == -1)
+			}
+			else if(kill(pid , SIGUSR2) == -1)
                 exit(1);
-            usleep(100);
+            usleep(500);
         }
-        if(!message[i])
-            break;
-        ++i;
-    }
+         if(!message[i])
+             break;
+         ++i;
+     }
 }
 
 
@@ -49,8 +49,8 @@ int main (int ac , char **av)
        printf("Invalid arguments \n"); 
         exit(EXIT_FAILURE);
     }
-    //signal(SIGUSR1, signal_handler_c);
-	//signal(SIGUSR2, signal_handler_c);
+    signal(SIGUSR1, signal_handler_c);
+	signal(SIGUSR2, signal_handler_c);
     pid = ft_atoi(av[1]);
     send_bits(pid,av[2]);
 }

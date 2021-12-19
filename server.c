@@ -1,73 +1,35 @@
 #include"minitalk.h"
 #include<stdio.h>
 
-
-
-
-void    send_signal(int pid, int signum)
-{
-    if(kill(pid , signum)== -1)
-        exit(EXIT_FAILURE);
-}
-
-/*void	signal_handler(int signum, siginfo_t *info, void *context)
-{
-	static char	c = 0xff;
-	static int	bit = 0;
-	int	pid ;
-	//static char	*message = 0;
-
-	(void)context;
-	if ((info)->si_pid)
-		pid = info->si_pid;
-	if (signum == SIGUSR1)
-    {
-		c |= 0x80 >> bit;
-        printf("sigusr1");
-    }
-    else if (signum == SIGUSR2)
-    {
-		c ^= 0x80 >> bit;
-        printf("sigusr2");
-    }
-    if(++bit == 8)
-        printf("%d",c);
-	bit = 0;
-	c = 0xff;
-	send_signal(pid, SIGUSR1);
-}*/
+ void    send_signal(int pid, int signum)
+ {
+     if(kill(pid , signum)== -1)
+         exit(EXIT_FAILURE);
+ }
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
+    
 	static char	c = 0xFF;
 	static int	bit = 0;
 	static int	pid = 0;
-	static char	*message = 0;
-
+	static char	*message ;
 	(void)context;
 	if ((info)->si_pid)
 		pid = info->si_pid;
 	if (signum == SIGUSR1)
-		c |= 0x80 >> bit;
-	else if (signum == SIGUSR2)
-		c ^= 0x80 >> bit;
-	if (++bit == 9)
-	{
-		 if (!c)
-	     {
-		 	printf("%s\n",message);
-		 	send_signal(pid, SIGUSR2);
-		 }
-		 else
-		message = ft_str_add_char(message, c);
-		printf ("%c",c);
+    	c |= 0x80 >> bit;
+    else if (signum == SIGUSR2)
+        c ^= 0x80 >> bit;
+    if (++bit == 9)
+    {
+        if (!c)
+			send_signal(pid, SIGUSR1);
+		write(1,&c,1);
         bit = 0;
-		c = 0xFF;
-	}
-	send_signal(pid, SIGUSR1);
+	    c = 0xFF;
+    }
 }
-
-
 
 int main (void)
 {
