@@ -2,41 +2,48 @@
 
 int	ft_isdigit(int c)
 {
-	return (c >= '0' && c <= '9');
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }
-size_t	ft_strlen(const char *str)
+
+int	str_isdigit(char *str)
 {
-	int len = 0 ;
-	while (str[len])
-		len++;
-	return(len);
+	int i = 0; 
+	while (str[i])
+	{
+		if (!(str[i]>= '0' && str[i] <= '9'))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int	ft_atoi(const char *str)
 {
-	int				sign;
-	unsigned int	res;
+	int		i;
+	int		sign;
+	long	result;
 
-	res = 0;
+	i = 0;
 	sign = 1;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-' || *str == '+')
+	result = 0;
+	while (((9 <= str[i] && str[i] <= 13) || str[i] == 32) && str[i])
+		i++;
+	if (str[i] == '-')
 	{
-		if (*str == '-')
-			sign = -1;
-		str++;
+		sign = -1;
+		i++;
 	}
-	while (*str && ft_isdigit(*str))
+	else if (str[i] == '+')
+		i++;
+	while (str[i])
 	{
-		res = res * 10 + *str - '0';
-		str++;
+		if (str[i] >= '0' && str[i] <= '9')
+			result = result * 10 + (str[i] - '0');
+		else
+			break ;
+		i++;
 	}
-	if (res <= 2147483648)
-		return (res * sign);
-	if (res >= 2147483648 && sign > 0)
-		return (-1);
-	return (0);
+	return (result * sign);
 }
-
-

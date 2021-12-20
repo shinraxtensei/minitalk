@@ -1,13 +1,10 @@
-
 #include"minitalk.h"
-#include<stdio.h>
-
 
 void	signal_handler_c(int signum)
 {
 	if (signum == SIGUSR1)
 	{
-		printf("->Message sent \n");
+		ft_printf("Message wsel db 👍 \n");
 	}
 }
 
@@ -44,9 +41,9 @@ void    send_bits(int pid, char *message)
 int main (int ac , char **av)
 {
     int pid;
-    if(ac != 3)
+    if(ac != 3 || av[2][0] == 0 || !str_isdigit(av[1]))
     {
-       printf("Invalid arguments \n"); 
+       ft_printf("Invalid arguments asahbi , wasahbi 🧐\n"); 
         exit(EXIT_FAILURE);
     }
     signal(SIGUSR1, signal_handler_c);
